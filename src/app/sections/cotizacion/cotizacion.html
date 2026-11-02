@@ -1,0 +1,86 @@
+<section class="pt0" id="cotizacion">
+  <div class="wrap">
+    <div class="cot-box">
+      <div class="cot-intro">
+        <span class="eyebrow">Cotización</span>
+        <h2>Pide tu cotización</h2>
+        <p class="muted">Déjame tus datos y lo que necesitas. Te respondo con una cotización el mismo día, por WhatsApp o correo.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate class="cot-form">
+        <div class="field">
+          <label for="cot-nombre">Nombre</label>
+          <input id="cot-nombre" type="text" formControlName="nombre" autocomplete="name" maxlength="60"
+                 [attr.aria-invalid]="!!error('nombre')" aria-describedby="err-nombre">
+          @if (error('nombre'); as e) { <p class="err" id="err-nombre">{{ e }}</p> }
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="cot-telefono">Teléfono</label>
+            <input id="cot-telefono" type="tel" formControlName="telefono" autocomplete="tel" inputmode="tel"
+                   placeholder="+56912345678" [attr.aria-invalid]="!!error('telefono')" aria-describedby="err-telefono">
+            @if (error('telefono'); as e) { <p class="err" id="err-telefono">{{ e }}</p> }
+          </div>
+
+          <div class="field">
+            <label for="cot-email">Email <span class="opt">(opcional)</span></label>
+            <input id="cot-email" type="email" formControlName="email" autocomplete="email" maxlength="120"
+                   [attr.aria-invalid]="!!error('email')" aria-describedby="err-email">
+            @if (error('email'); as e) { <p class="err" id="err-email">{{ e }}</p> }
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cot-tipoServicio">Tipo de servicio</label>
+          <select id="cot-tipoServicio" formControlName="tipoServicio"
+                  [attr.aria-invalid]="!!error('tipoServicio')" aria-describedby="err-tipoServicio">
+            <option [ngValue]="null" disabled>Selecciona una opción</option>
+            @for (o of opciones; track o.valor) {
+              <option [ngValue]="o.valor">{{ o.etiqueta }}</option>
+            }
+          </select>
+          @if (error('tipoServicio'); as e) { <p class="err" id="err-tipoServicio">{{ e }}</p> }
+        </div>
+
+        <div class="field">
+          <label for="cot-mensaje">Mensaje</label>
+          <textarea id="cot-mensaje" rows="5" formControlName="mensaje" [attr.maxlength]="mensajeMax"
+                    placeholder="Cuéntame qué hace tu negocio y qué necesitas"
+                    [attr.aria-invalid]="!!error('mensaje')" aria-describedby="err-mensaje cont-mensaje"></textarea>
+          <div class="field-foot">
+            @if (error('mensaje'); as e) { <p class="err" id="err-mensaje">{{ e }}</p> } @else { <span></span> }
+            <span class="count" id="cont-mensaje">{{ largoMensaje() }}/{{ mensajeMax }}</span>
+          </div>
+        </div>
+
+        <!-- Honeypot anti-spam: invisible para personas, no lo llenes. -->
+        <div class="hp" aria-hidden="true">
+          <label for="cot-website">Sitio web</label>
+          <input id="cot-website" type="text" formControlName="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="estado() === 'enviando'">
+          {{ estado() === 'enviando' ? 'Enviando...' : 'Enviar solicitud' }}
+        </button>
+
+        <div aria-live="polite">
+          @if (lento()) {
+            <p class="aviso">Esto puede tardar unos segundos, estamos despertando el servidor…</p>
+          }
+          @switch (estado()) {
+            @case ('exito') { <p class="alert ok" role="status">{{ mensajeResultado() }}</p> }
+            @case ('invalido') { <p class="alert bad" role="alert">{{ mensajeResultado() }}</p> }
+            @case ('limite') { <p class="alert bad" role="alert">{{ mensajeResultado() }}</p> }
+            @case ('fallo') {
+              <div class="alert bad" role="alert">
+                <p>{{ mensajeResultado() }}</p>
+                <a class="btn btn-wa" [appWhatsapp]="msgWhatsapp">Escribir por WhatsApp</a>
+              </div>
+            }
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

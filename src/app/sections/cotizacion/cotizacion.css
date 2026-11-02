@@ -1,0 +1,46 @@
+:host { display: block; }
+.pt0 { padding-top: 0; }
+.muted { color: var(--muted); }
+
+.cot-box { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 40px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 40px; align-items: start; }
+.cot-intro { display: grid; gap: 14px; min-width: 0; }
+.cot-intro h2 { font-size: clamp(28px, 4.5vw, 44px); }
+
+.cot-form { display: grid; gap: 18px; min-width: 0; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+label { font-weight: 600; font-size: 15px; }
+.opt { font-weight: 400; color: var(--muted); }
+
+input, select, textarea {
+  width: 100%;
+  font: 400 16px/1.4 var(--f-body);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+textarea { resize: vertical; min-height: 120px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+[aria-invalid="true"] { border-color: var(--danger); }
+
+.err { color: var(--danger); font-size: 14px; }
+.field-foot { display: flex; justify-content: space-between; gap: 12px; }
+.count { font: 500 12px/1.6 var(--f-mono); color: var(--muted); flex: none; }
+
+/* honeypot fuera de pantalla (no display:none, para que los bots lo llenen) */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+.btn-primary { justify-self: start; }
+.aviso { font-size: 14px; color: var(--muted); }
+.alert { padding: 14px 16px; border-radius: 12px; font-size: 15px; display: grid; gap: 12px; justify-items: start; }
+.alert.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ink); border: 1px solid var(--ok); }
+.alert.bad { background: color-mix(in srgb, var(--danger) 10%, transparent); color: var(--ink); border: 1px solid var(--danger); }
+
+@media (max-width: 900px) { .cot-box { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .cot-box { padding: 24px; }
+  .row { grid-template-columns: 1fr; }
+  .btn-primary { justify-self: stretch; }
+}
